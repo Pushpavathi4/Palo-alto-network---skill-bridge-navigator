@@ -68,8 +68,7 @@ The UI clearly shows which mode is active with a badge: 🤖 AI or 🔧 Fallback
 ---
 
 ## Video Presentation
-
-[Link to 5-7 minute video] *(Upload to YouTube/Vimeo and paste link here)*
+https://youtu.be/ft_wGgYnYDw
 
 ---
 
