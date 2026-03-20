@@ -1,6 +1,6 @@
 # 🌉 Skill-Bridge Career Navigator
 
-**Candidate Name:** [Your Name]
+**Candidate Name:** Pushpavathi
 **Scenario Chosen:** 2 — Skill-Bridge Career Navigator
 **Estimated Time Spent:** ~5 hours
 
@@ -34,6 +34,8 @@ copy .env.example .env
 python app.py
 
 # 6. Open http://localhost:5000 in your browser
+## 🚀 Live Demo
+https://skill-bridge-xiyh.onrender.com
 ```
 
 ### Test Commands
