@@ -1,0 +1,92 @@
+[
+  {
+    "id": "jd-001",
+    "title": "Cloud Engineer",
+    "company": "Acme Cloud Corp",
+    "required_skills": ["AWS", "Terraform", "Docker", "Kubernetes", "Linux", "Python", "CI/CD", "Networking", "IAM", "CloudFormation"],
+    "preferred_skills": ["GCP", "Azure", "Ansible", "Prometheus", "Grafana"],
+    "experience_level": "entry",
+    "description": "Design and manage cloud infrastructure on AWS. Automate deployments using Terraform and CI/CD pipelines. Monitor and troubleshoot production systems."
+  },
+  {
+    "id": "jd-002",
+    "title": "Cloud Engineer",
+    "company": "Nimbus Technologies",
+    "required_skills": ["Azure", "Docker", "Kubernetes", "Python", "Bash", "CI/CD", "Networking", "ARM Templates", "Linux", "Git"],
+    "preferred_skills": ["AWS", "Terraform", "Helm", "Datadog"],
+    "experience_level": "entry",
+    "description": "Build and maintain Azure-based cloud solutions. Implement containerized microservices and manage CI/CD workflows."
+  },
+  {
+    "id": "jd-003",
+    "title": "Backend Developer",
+    "company": "DataFlow Inc",
+    "required_skills": ["Python", "Django", "PostgreSQL", "REST APIs", "Git", "Docker", "Unit Testing", "SQL", "Linux", "Redis"],
+    "preferred_skills": ["GraphQL", "Celery", "RabbitMQ", "AWS"],
+    "experience_level": "entry",
+    "description": "Develop and maintain backend services using Django. Design RESTful APIs and optimize database queries for performance."
+  },
+  {
+    "id": "jd-004",
+    "title": "Backend Developer",
+    "company": "ServerStack Ltd",
+    "required_skills": ["Java", "Spring Boot", "PostgreSQL", "REST APIs", "Git", "Docker", "Unit Testing", "SQL", "Maven", "Microservices"],
+    "preferred_skills": ["Kafka", "Redis", "Kubernetes", "AWS"],
+    "experience_level": "entry",
+    "description": "Build scalable microservices with Spring Boot. Integrate with databases and message queues for high-throughput systems."
+  },
+  {
+    "id": "jd-005",
+    "title": "Frontend Developer",
+    "company": "PixelCraft Studios",
+    "required_skills": ["JavaScript", "React", "HTML", "CSS", "TypeScript", "Git", "REST APIs", "Responsive Design", "Unit Testing", "Webpack"],
+    "preferred_skills": ["Next.js", "GraphQL", "Figma", "Storybook"],
+    "experience_level": "entry",
+    "description": "Build responsive, accessible web applications using React and TypeScript. Collaborate with designers to implement pixel-perfect UIs."
+  },
+  {
+    "id": "jd-006",
+    "title": "Frontend Developer",
+    "company": "WebWave Digital",
+    "required_skills": ["JavaScript", "Vue.js", "HTML", "CSS", "TypeScript", "Git", "REST APIs", "Responsive Design", "SASS", "Jest"],
+    "preferred_skills": ["Nuxt.js", "Tailwind CSS", "Cypress", "Figma"],
+    "experience_level": "entry",
+    "description": "Develop modern single-page applications with Vue.js. Ensure cross-browser compatibility and write comprehensive tests."
+  },
+  {
+    "id": "jd-007",
+    "title": "Data Analyst",
+    "company": "InsightMetrics",
+    "required_skills": ["Python", "SQL", "Pandas", "Data Visualization", "Excel", "Statistics", "Tableau", "ETL", "Git", "Jupyter"],
+    "preferred_skills": ["R", "Power BI", "Airflow", "dbt"],
+    "experience_level": "entry",
+    "description": "Analyze business data to generate actionable insights. Build dashboards and automate reporting pipelines."
+  },
+  {
+    "id": "jd-008",
+    "title": "DevOps Engineer",
+    "company": "PipelineOps",
+    "required_skills": ["Linux", "Docker", "Kubernetes", "CI/CD", "Terraform", "AWS", "Python", "Bash", "Git", "Monitoring"],
+    "preferred_skills": ["Ansible", "Jenkins", "ArgoCD", "Prometheus", "Grafana"],
+    "experience_level": "entry",
+    "description": "Build and maintain CI/CD pipelines. Manage container orchestration and infrastructure as code for cloud-native applications."
+  },
+  {
+    "id": "jd-009",
+    "title": "Cybersecurity Analyst",
+    "company": "ShieldNet Security",
+    "required_skills": ["Network Security", "SIEM", "Incident Response", "Linux", "Firewalls", "Vulnerability Assessment", "Python", "TCP/IP", "Log Analysis", "Risk Assessment"],
+    "preferred_skills": ["Splunk", "Wireshark", "Penetration Testing", "Cloud Security", "SOAR"],
+    "experience_level": "entry",
+    "description": "Monitor security events, investigate incidents, and implement defensive measures. Conduct vulnerability assessments and maintain SIEM platforms."
+  },
+  {
+    "id": "jd-010",
+    "title": "Machine Learning Engineer",
+    "company": "NeuralPath AI",
+    "required_skills": ["Python", "Machine Learning", "TensorFlow", "Scikit-learn", "SQL", "Statistics", "Data Preprocessing", "Git", "Docker", "NumPy"],
+    "preferred_skills": ["PyTorch", "MLflow", "Kubernetes", "AWS SageMaker", "NLP"],
+    "experience_level": "entry",
+    "description": "Develop and deploy machine learning models. Preprocess data, train models, and integrate them into production pipelines."
+  }
+]

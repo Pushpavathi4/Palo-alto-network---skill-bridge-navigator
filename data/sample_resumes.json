@@ -1,0 +1,67 @@
+[
+  {
+    "id": "res-001",
+    "name": "Alex Johnson",
+    "email": "alex.johnson@example.com",
+    "education": "B.S. Computer Science, State University, 2024",
+    "skills": ["Python", "Java", "Git", "SQL", "HTML", "CSS", "JavaScript", "Linux", "Docker"],
+    "projects": [
+      "Built a REST API for a student club management system using Flask and PostgreSQL",
+      "Deployed a containerized web app on AWS EC2 using Docker"
+    ],
+    "certifications": ["AWS Cloud Practitioner"],
+    "resume_text": "Recent CS graduate with experience in Python, Java, Git, SQL, HTML, CSS, JavaScript, Linux, and Docker. Built a REST API using Flask and PostgreSQL for a student club management system. Deployed a containerized web app on AWS EC2. AWS Cloud Practitioner certified."
+  },
+  {
+    "id": "res-002",
+    "name": "Sam Rivera",
+    "email": "sam.rivera@example.com",
+    "education": "B.S. Information Technology, Tech College, 2024",
+    "skills": ["JavaScript", "React", "HTML", "CSS", "Git", "Node.js", "MongoDB", "REST APIs"],
+    "projects": [
+      "Created a full-stack e-commerce site with React frontend and Node.js backend",
+      "Built a real-time chat application using WebSockets"
+    ],
+    "certifications": [],
+    "resume_text": "IT graduate skilled in JavaScript, React, HTML, CSS, Git, Node.js, MongoDB, and REST APIs. Created a full-stack e-commerce site with React and Node.js. Built a real-time chat application using WebSockets."
+  },
+  {
+    "id": "res-003",
+    "name": "Jordan Lee",
+    "email": "jordan.lee@example.com",
+    "education": "B.S. Data Science, Analytics University, 2024",
+    "skills": ["Python", "SQL", "Pandas", "NumPy", "Matplotlib", "Statistics", "Excel", "Jupyter", "Git"],
+    "projects": [
+      "Analyzed 50K+ rows of sales data to identify seasonal trends using Pandas",
+      "Built a linear regression model to predict housing prices with Scikit-learn"
+    ],
+    "certifications": ["Google Data Analytics Certificate"],
+    "resume_text": "Data Science graduate proficient in Python, SQL, Pandas, NumPy, Matplotlib, Statistics, Excel, Jupyter, and Git. Analyzed 50K+ rows of sales data for seasonal trends. Built a linear regression model for housing price prediction using Scikit-learn. Google Data Analytics certified."
+  },
+  {
+    "id": "res-004",
+    "name": "Taylor Kim",
+    "email": "taylor.kim@example.com",
+    "education": "B.S. Computer Engineering, Engineering Institute, 2024",
+    "skills": ["Python", "C++", "Linux", "Bash", "Networking", "TCP/IP", "Git", "Docker", "AWS"],
+    "projects": [
+      "Configured a home lab with virtual networks using VirtualBox and pfSense",
+      "Wrote a Python script to automate log parsing and anomaly detection"
+    ],
+    "certifications": ["CompTIA Security+"],
+    "resume_text": "Computer Engineering graduate with skills in Python, C++, Linux, Bash, Networking, TCP/IP, Git, Docker, and AWS. Configured a home lab with virtual networks. Automated log parsing and anomaly detection with Python. CompTIA Security+ certified."
+  },
+  {
+    "id": "res-005",
+    "name": "Morgan Chen",
+    "email": "morgan.chen@example.com",
+    "education": "B.S. Software Engineering, Pacific University, 2024",
+    "skills": ["Python", "Django", "PostgreSQL", "REST APIs", "Git", "HTML", "CSS", "Unit Testing", "Linux"],
+    "projects": [
+      "Built a task management API with Django REST Framework and PostgreSQL",
+      "Implemented JWT authentication and role-based access control"
+    ],
+    "certifications": [],
+    "resume_text": "Software Engineering graduate experienced in Python, Django, PostgreSQL, REST APIs, Git, HTML, CSS, Unit Testing, and Linux. Built a task management API with Django REST Framework. Implemented JWT authentication and role-based access control."
+  }
+]

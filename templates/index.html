@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill-Bridge Career Navigator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>🌉 Skill-Bridge Career Navigator</h1>
+        <p class="subtitle">Paste your resume, pick a target role, and get a personalized learning roadmap.</p>
+    </header>
+
+    <!-- Progress Tracker -->
+    <nav class="progress-tracker" id="progress-tracker">
+        <div class="progress-step">
+            <div class="step-circle active" id="prog-1" title="Resume">1</div>
+            <div class="step-line" id="line-1"></div>
+        </div>
+        <div class="progress-step">
+            <div class="step-circle" id="prog-2" title="Skills">2</div>
+            <div class="step-line" id="line-2"></div>
+        </div>
+        <div class="progress-step">
+            <div class="step-circle" id="prog-3" title="Gap Analysis">3</div>
+            <div class="step-line" id="line-3"></div>
+        </div>
+        <div class="progress-step">
+            <div class="step-circle" id="prog-4" title="Roadmap">4</div>
+            <div class="step-line" id="line-4"></div>
+        </div>
+        <div class="progress-step">
+            <div class="step-circle" id="prog-5" title="Interview">5</div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Step 1: Resume Input -->
+        <section id="step-resume" class="card">
+            <h2><span class="step-icon">1</span> <span class="step-label">Your Resume</span></h2>
+            <div class="sample-picker">
+                <label for="sample-select">Quick start with a sample resume:</label>
+                <select id="sample-select"><option value="">— Select a sample —</option></select>
+            </div>
+            <textarea id="resume-text" rows="8" placeholder="Paste your resume text here — include skills, projects, certifications..."></textarea>
+            <button id="btn-extract" class="btn-primary">⚡ Extract Skills</button>
+            <div id="extract-status" class="status"></div>
+        </section>
+
+        <!-- Step 2: Extracted Skills -->
+        <section id="step-skills" class="card hidden">
+            <h2><span class="step-icon">2</span> <span class="step-label">Your Skills</span></h2>
+            <div id="method-badge" class="badge"></div>
+            <div id="skills-container"></div>
+            <div class="role-picker">
+                <label for="role-select">Choose your target role:</label>
+                <select id="role-select"><option value="">— Select a role —</option></select>
+            </div>
+            <button id="btn-analyze" class="btn-primary">📊 Analyze Gap</button>
+        </section>
+
+        <!-- Step 3: Gap Analysis -->
+        <section id="step-gap" class="card hidden">
+            <h2><span class="step-icon">3</span> <span class="step-label">Gap Analysis</span></h2>
+            <div id="gap-results"></div>
+            <button id="btn-roadmap" class="btn-primary">🗺️ Generate Learning Roadmap</button>
+        </section>
+
+        <!-- Step 4: Roadmap -->
+        <section id="step-roadmap" class="card hidden">
+            <h2><span class="step-icon">4</span> <span class="step-label">Your Learning Roadmap</span></h2>
+            <div id="roadmap-method" class="badge"></div>
+            <div id="roadmap-results"></div>
+            <button id="btn-interview" class="btn-primary">🎤 Generate Mock Interview</button>
+        </section>
+
+        <!-- Step 5: Mock Interview -->
+        <section id="step-interview" class="card hidden">
+            <h2><span class="step-icon">5</span> <span class="step-label">Mock Interview Practice</span></h2>
+            <div id="interview-method" class="badge"></div>
+            <div id="interview-controls">
+                <label for="num-questions">Number of questions:</label>
+                <select id="num-questions">
+                    <option value="3">3</option>
+                    <option value="5" selected>5</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                </select>
+                <button id="btn-regenerate" class="btn-secondary">🔄 Regenerate</button>
+            </div>
+            <div id="interview-results"></div>
+        </section>
+
+        <!-- Job Search -->
+        <section id="step-search" class="card">
+            <h2><span class="step-icon">🔍</span> <span class="step-label">Search Job Descriptions</span></h2>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search by role, company, or skill...">
+                <button id="btn-search" class="btn-secondary">Search</button>
+            </div>
+            <div id="search-results"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Skill-Bridge Career Navigator — Built with synthetic data only. No real personal data used.</p>
+    </footer>
+
+    <script>
+        const API = '';
+        let currentSkills = [];
+        let currentMissingSkills = [];
+        let currentTargetRole = '';
+
+        // --- Progress Tracker ---
+        function updateProgress(step) {
+            for (let i = 1; i <= 5; i++) {
+                const circle = document.getElementById(`prog-${i}`);
+                const line = document.getElementById(`line-${i}`);
+                circle.classList.remove('active', 'done');
+                if (line) line.classList.remove('done');
+
+                if (i < step) {
+                    circle.classList.add('done');
+                    circle.textContent = '✓';
+                    if (line) line.classList.add('done');
+                } else if (i === step) {
+                    circle.classList.add('active');
+                    circle.textContent = i;
+                } else {
+                    circle.textContent = i;
+                }
+            }
+        }
+
+        function showSection(id, step) {
+            const el = document.getElementById(id);
+            el.classList.remove('hidden');
+            el.classList.add('fade-in');
+            updateProgress(step);
+            setTimeout(() => el.scrollIntoView({behavior: 'smooth', block: 'start'}), 50);
+        }
+
+        // --- Init ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSamples();
+            loadRoles();
+            document.getElementById('btn-extract').addEventListener('click', extractSkills);
+            document.getElementById('btn-analyze').addEventListener('click', analyzeGap);
+            document.getElementById('btn-roadmap').addEventListener('click', generateRoadmap);
+            document.getElementById('btn-interview').addEventListener('click', generateInterview);
+            document.getElementById('btn-regenerate').addEventListener('click', generateInterview);
+            document.getElementById('btn-search').addEventListener('click', searchJobs);
+            document.getElementById('search-input').addEventListener('keypress', e => {
+                if (e.key === 'Enter') searchJobs();
+            });
+            document.getElementById('sample-select').addEventListener('change', loadSampleResume);
+            updateProgress(1);
+        });
+
+        async function loadSamples() {
+            const res = await fetch(`${API}/api/sample-resumes`);
+            const data = await res.json();
+            const sel = document.getElementById('sample-select');
+            data.resumes.forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r.resume_text;
+                opt.textContent = `${r.name} — ${r.education}`;
+                sel.appendChild(opt);
+            });
+        }
+
+        async function loadRoles() {
+            const res = await fetch(`${API}/api/roles`);
+            const data = await res.json();
+            const sel = document.getElementById('role-select');
+            data.roles.forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r;
+                opt.textContent = r;
+                sel.appendChild(opt);
+            });
+        }
+
+        function loadSampleResume() {
+            const val = document.getElementById('sample-select').value;
+            if (val) document.getElementById('resume-text').value = val;
+        }
+
+        function setLoading(btn, loading) {
+            if (loading) {
+                btn.dataset.origText = btn.textContent;
+                btn.innerHTML = '<span class="spinner"></span> Processing...';
+                btn.disabled = true;
+            } else {
+                btn.textContent = btn.dataset.origText || btn.textContent;
+                btn.disabled = false;
+            }
+        }
+
+        // --- Step 1: Extract Skills ---
+        async function extractSkills() {
+            const text = document.getElementById('resume-text').value.trim();
+            const status = document.getElementById('extract-status');
+            const btn = document.getElementById('btn-extract');
+
+            if (!text) { status.textContent = '⚠️ Please paste your resume text.'; status.className = 'status error'; return; }
+            if (text.length < 20) { status.textContent = '⚠️ Resume text is too short. Add more detail.'; status.className = 'status error'; return; }
+
+            setLoading(btn, true);
+            status.innerHTML = '<span class="spinner"></span> Extracting skills...';
+            status.className = 'status loading';
+
+            try {
+                const res = await fetch(`${API}/api/extract-skills`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({resume_text: text})
+                });
+                const data = await res.json();
+                setLoading(btn, false);
+
+                if (!res.ok) { status.textContent = `❌ ${data.error}`; status.className = 'status error'; return; }
+
+                currentSkills = data.skills;
+                status.textContent = `✅ Found ${data.skills.length} skills.`;
+                status.className = 'status success';
+                renderSkills(data);
+                showSection('step-skills', 2);
+            } catch (e) {
+                setLoading(btn, false);
+                status.textContent = '❌ Network error. Is the server running?';
+                status.className = 'status error';
+            }
+        }
+
+        function renderSkills(data) {
+            const badge = document.getElementById('method-badge');
+            badge.textContent = data.method === 'ai' ? '🤖 Extracted via AI (Llama 3.3)' : '🔧 Extracted via keyword matching (fallback)';
+            badge.className = data.method === 'ai' ? 'badge ai' : 'badge fallback';
+
+            const container = document.getElementById('skills-container');
+            container.innerHTML = '';
+            if (data.categorized) {
+                for (const [cat, skills] of Object.entries(data.categorized)) {
+                    const catDiv = document.createElement('div');
+                    catDiv.className = 'skill-category';
+                    catDiv.innerHTML = `<h4>${formatCategory(cat)}</h4>`;
+                    const tags = document.createElement('div');
+                    tags.className = 'skill-tags';
+                    skills.forEach(s => {
+                        const tag = document.createElement('span');
+                        tag.className = 'skill-tag';
+                        tag.textContent = s;
+                        tags.appendChild(tag);
+                    });
+                    catDiv.appendChild(tags);
+                    container.appendChild(catDiv);
+                }
+            }
+        }
+
+        function formatCategory(cat) {
+            return cat.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        }
+
+        // --- Step 2: Analyze Gap ---
+        async function analyzeGap() {
+            const role = document.getElementById('role-select').value;
+            if (!role) { alert('Please select a target role.'); return; }
+            currentTargetRole = role;
+            const btn = document.getElementById('btn-analyze');
+            setLoading(btn, true);
+
+            try {
+                const res = await fetch(`${API}/api/analyze`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({skills: currentSkills, target_role: role})
+                });
+                const data = await res.json();
+                setLoading(btn, false);
+                if (!res.ok) { alert(data.error); return; }
+
+                renderGapAnalysis(data.analysis);
+                showSection('step-gap', 3);
+            } catch (e) {
+                setLoading(btn, false);
+                alert('Network error.');
+            }
+        }
+
+        function renderGapAnalysis(analysis) {
+            const container = document.getElementById('gap-results');
+            container.innerHTML = '';
+            currentMissingSkills = [];
+
+            analysis.forEach(job => {
+                const allMissing = [...job.missing_required, ...job.missing_preferred];
+                allMissing.forEach(s => { if (!currentMissingSkills.includes(s)) currentMissingSkills.push(s); });
+
+                const card = document.createElement('div');
+                card.className = 'gap-card';
+                const pctClass = job.match_percentage >= 70 ? 'high' : job.match_percentage >= 40 ? 'mid' : 'low';
+                card.innerHTML = `
+                    <div class="gap-header">
+                        <strong>${job.title}</strong> at ${job.company}
+                        <span class="match-pct ${pctClass}">${job.match_percentage}% match</span>
+                    </div>
+                    <div class="match-bar-wrapper">
+                        <div class="match-bar ${pctClass}" style="width: ${job.match_percentage}%"></div>
+                    </div>
+                    <div class="gap-body">
+                        <div class="gap-col">
+                            <h5>✅ Matched Required (${job.matched_required.length})</h5>
+                            <div class="skill-tags">${job.matched_required.map(s => `<span class="skill-tag matched">${s}</span>`).join('')}</div>
+                        </div>
+                        <div class="gap-col">
+                            <h5>❌ Missing Required (${job.missing_required.length})</h5>
+                            <div class="skill-tags">${job.missing_required.map(s => `<span class="skill-tag missing">${s}</span>`).join('')}</div>
+                        </div>
+                        <div class="gap-col">
+                            <h5>⭐ Matched Preferred (${job.matched_preferred.length})</h5>
+                            <div class="skill-tags">${job.matched_preferred.map(s => `<span class="skill-tag matched">${s}</span>`).join('')}</div>
+                        </div>
+                        <div class="gap-col">
+                            <h5>📋 Missing Preferred (${job.missing_preferred.length})</h5>
+                            <div class="skill-tags">${job.missing_preferred.map(s => `<span class="skill-tag missing-pref">${s}</span>`).join('')}</div>
+                        </div>
+                    </div>`;
+                container.appendChild(card);
+            });
+        }
+
+        // --- Step 3: Roadmap ---
+        async function generateRoadmap() {
+            if (!currentMissingSkills.length) { alert('No missing skills found!'); return; }
+            const btn = document.getElementById('btn-roadmap');
+            setLoading(btn, true);
+
+            try {
+                const res = await fetch(`${API}/api/roadmap`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({missing_skills: currentMissingSkills, target_role: currentTargetRole})
+                });
+                const data = await res.json();
+                setLoading(btn, false);
+                renderRoadmap(data);
+                showSection('step-roadmap', 4);
+            } catch (e) {
+                setLoading(btn, false);
+                alert('Network error.');
+            }
+        }
+
+        function getUrgencyInfo(urgency) {
+            switch ((urgency || '').toLowerCase()) {
+                case 'critical': return { emoji: '🔴', label: 'CRITICAL — Learn First', cls: 'urgency-critical' };
+                case 'important': return { emoji: '🟡', label: 'IMPORTANT — High Value', cls: 'urgency-important' };
+                case 'nice-to-have': return { emoji: '🟢', label: 'NICE TO HAVE — Bonus', cls: 'urgency-nice' };
+                default: return { emoji: '⚪', label: 'RECOMMENDED', cls: 'urgency-nice' };
+            }
+        }
+
+        function renderRoadmap(data) {
+            const badge = document.getElementById('roadmap-method');
+            if (data.method === 'ai') {
+                badge.textContent = '🤖 Roadmap generated via AI (Llama 3.3)';
+                badge.className = 'badge ai';
+            } else if (data.method === 'fallback') {
+                badge.textContent = '🔧 Roadmap generated via rule-based engine (fallback)';
+                badge.className = 'badge fallback';
+            } else {
+                badge.textContent = '🎉 No gaps — you\'re a perfect match!';
+                badge.className = 'badge success';
+            }
+
+            const container = document.getElementById('roadmap-results');
+            container.innerHTML = '';
+
+            const roadmap = data.roadmap || [];
+            let totalHours = 0;
+            let criticalCount = 0, importantCount = 0, niceCount = 0;
+
+            roadmap.forEach(item => {
+                totalHours += item.estimated_hours || 0;
+                const u = (item.urgency || '').toLowerCase();
+                if (u === 'critical') criticalCount++;
+                else if (u === 'important') importantCount++;
+                else niceCount++;
+            });
+
+            if (roadmap.length) {
+                const summary = document.createElement('div');
+                summary.className = 'roadmap-summary';
+                summary.innerHTML = `
+                    📚 <strong>Total: ~${totalHours} hours</strong> across ${roadmap.length} skills<br>
+                    <span style="font-size:0.85rem; margin-top:0.3rem; display:inline-block;">
+                        ${criticalCount ? `🔴 ${criticalCount} Critical` : ''}
+                        ${importantCount ? ` &nbsp;🟡 ${importantCount} Important` : ''}
+                        ${niceCount ? ` &nbsp;🟢 ${niceCount} Nice to Have` : ''}
+                        &nbsp;— <em>Complete in priority order for fastest results</em>
+                    </span>`;
+                container.appendChild(summary);
+            }
+
+            let currentUrgency = '';
+            roadmap.forEach(item => {
+                const urg = getUrgencyInfo(item.urgency);
+
+                // Section header when urgency changes
+                if (item.urgency !== currentUrgency) {
+                    currentUrgency = item.urgency;
+                    const header = document.createElement('div');
+                    header.className = `roadmap-section-header ${urg.cls}`;
+                    header.innerHTML = `${urg.emoji} ${urg.label}`;
+                    container.appendChild(header);
+                }
+
+                const row = document.createElement('div');
+                row.className = `roadmap-item ${urg.cls}`;
+                row.innerHTML = `
+                    <div class="roadmap-priority">#${item.priority}</div>
+                    <div class="roadmap-content">
+                        <div class="roadmap-title-row">
+                            <strong>${item.skill}</strong>
+                            <span class="urgency-badge ${urg.cls}">${urg.emoji} ${(item.urgency || 'recommended').toUpperCase()}</span>
+                            <span class="hours">~${item.estimated_hours}h</span>
+                        </div>
+                        <p class="roadmap-reason">${item.reason}</p>
+                        <a href="${item.resource_url}" target="_blank" rel="noopener">📖 ${item.resource_name}</a>
+                    </div>`;
+                container.appendChild(row);
+            });
+        }
+
+        // --- Search ---
+        async function searchJobs() {
+            const q = document.getElementById('search-input').value.trim();
+            const res = await fetch(`${API}/api/search-jobs?q=${encodeURIComponent(q)}`);
+            const data = await res.json();
+            const container = document.getElementById('search-results');
+            container.innerHTML = '';
+
+            if (!data.jobs.length) {
+                container.innerHTML = '<p class="no-results">No jobs found matching your search.</p>';
+                return;
+            }
+
+            data.jobs.forEach(jd => {
+                const card = document.createElement('div');
+                card.className = 'job-card';
+                card.innerHTML = `
+                    <strong>${jd.title}</strong> — ${jd.company}
+                    <p>${jd.description}</p>
+                    <div class="skill-tags">
+                        ${jd.required_skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}
+                        ${jd.preferred_skills.map(s => `<span class="skill-tag pref">${s}</span>`).join('')}
+                    </div>`;
+                container.appendChild(card);
+            });
+        }
+
+        // --- Step 5: Mock Interview ---
+        async function generateInterview() {
+            if (!currentSkills.length) { alert('Please extract skills first.'); return; }
+            if (!currentTargetRole) { alert('Please select a target role and run gap analysis first.'); return; }
+
+            const numQ = parseInt(document.getElementById('num-questions').value) || 5;
+            const container = document.getElementById('interview-results');
+            container.innerHTML = '<p class="status loading"><span class="spinner"></span> Generating interview questions...</p>';
+            document.getElementById('step-interview').classList.remove('hidden');
+            document.getElementById('step-interview').classList.add('fade-in');
+            updateProgress(5);
+            setTimeout(() => document.getElementById('step-interview').scrollIntoView({behavior: 'smooth'}), 50);
+
+            try {
+                const res = await fetch(`${API}/api/mock-interview`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({skills: currentSkills, target_role: currentTargetRole, num_questions: numQ})
+                });
+                const data = await res.json();
+                if (!res.ok) { container.innerHTML = `<p class="status error">❌ ${data.error}</p>`; return; }
+                renderInterview(data);
+            } catch (e) {
+                container.innerHTML = '<p class="status error">❌ Network error.</p>';
+            }
+        }
+
+        function renderInterview(data) {
+            const badge = document.getElementById('interview-method');
+            badge.textContent = data.method === 'ai' ? '🤖 Questions generated via AI (Llama 3.3)' : '🔧 Questions from curated question bank (fallback)';
+            badge.className = data.method === 'ai' ? 'badge ai' : 'badge fallback';
+
+            const container = document.getElementById('interview-results');
+            container.innerHTML = '';
+
+            if (!data.questions || !data.questions.length) {
+                container.innerHTML = '<p class="no-results">No questions generated.</p>';
+                return;
+            }
+
+            data.questions.forEach((q, i) => {
+                const card = document.createElement('div');
+                card.className = 'interview-card';
+                const diffClass = q.difficulty === 'easy' ? 'diff-easy' : q.difficulty === 'hard' ? 'diff-hard' : 'diff-medium';
+                card.innerHTML = `
+                    <div class="interview-header">
+                        <span class="interview-num">Q${i + 1}</span>
+                        <span class="interview-skill">${q.skill || ''}</span>
+                        <span class="interview-topic">${q.topic || ''}</span>
+                        <span class="interview-diff ${diffClass}">${q.difficulty || 'medium'}</span>
+                    </div>
+                    <p class="interview-question">${q.question}</p>
+                    <div class="interview-hint-wrapper">
+                        <button class="btn-hint" onclick="this.nextElementSibling.classList.toggle('hidden'); this.textContent = this.textContent === '💡 Show Hint' ? '🙈 Hide Hint' : '💡 Show Hint';">💡 Show Hint</button>
+                        <p class="interview-hint hidden">${q.hint || 'Think about the core concepts and practical applications.'}</p>
+                    </div>`;
+                container.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
